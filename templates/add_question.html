@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Soru Ekle - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Yeni Soru Ekle</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="subject_name" class="form-label">Ders Adı</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary"><i class="fas fa-book"></i></span>
+                            <input type="text" class="form-control border-primary bg-dark text-white" id="subject_name" name="subject_name" required placeholder="Matematik, Fizik, vb.">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="topic" class="form-label">Konu</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary"><i class="fas fa-bookmark"></i></span>
+                            <input type="text" class="form-control border-primary bg-dark text-white" id="topic" name="topic" required placeholder="Örn: Trigonometri, Osmanlı Tarihi, vb.">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="text" class="form-label">Soru Metni</label>
+                        <textarea class="form-control border-primary bg-dark text-white" id="text" name="text" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="image" class="form-label">Soru Görseli (İsteğe bağlı)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary"><i class="fas fa-image"></i></span>
+                            <input type="file" class="form-control border-primary bg-dark text-white" id="image" name="image" accept="image/*">
+                        </div>
+                        <div class="form-text text-muted">Desteklenen dosya türleri: JPG, JPEG, PNG, GIF. Maksimum boyut: 16MB</div>
+                        
+                        <!-- Resim Önizleme -->
+                        <div class="mt-2 d-none" id="imagePreviewContainer">
+                            <div class="card bg-dark border-primary">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Resim Önizleme</h5>
+                                </div>
+                                <div class="card-body text-center p-2">
+                                    <img id="imagePreview" src="#" alt="Yüklenen resim önizleme" class="img-fluid" style="max-height: 200px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="option_a" class="form-label">A Seçeneği</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary">A</span>
+                            <input type="text" class="form-control border-primary bg-dark text-white" id="option_a" name="option_a" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="option_b" class="form-label">B Seçeneği</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary">B</span>
+                            <input type="text" class="form-control border-primary bg-dark text-white" id="option_b" name="option_b" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="option_c" class="form-label">C Seçeneği</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary">C</span>
+                            <input type="text" class="form-control border-primary bg-dark text-white" id="option_c" name="option_c" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="option_d" class="form-label">D Seçeneği</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary">D</span>
+                            <input type="text" class="form-control border-primary bg-dark text-white" id="option_d" name="option_d" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="correct_answer" class="form-label">Doğru Cevap</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary"><i class="fas fa-check-circle"></i></span>
+                            <select class="form-select border-primary bg-dark text-white" id="correct_answer" name="correct_answer" required>
+                                <option value="" selected disabled>Doğru Cevabı Seçin</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save me-2"></i> Soruyu Ekle
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                {% set user = get_user() %}
+                {% if user and user.is_admin %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Geri Dön</a>
+                {% else %}
+                    <a href="{{ url_for('teacher_dashboard') }}" class="btn btn-secondary">Geri Dön</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('image').addEventListener('change', function(event) {
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        
+        if (event.target.files && event.target.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreviewContainer.classList.remove('d-none');
+            }
+            
+            reader.readAsDataURL(event.target.files[0]);
+        } else {
+            imagePreviewContainer.classList.add('d-none');
+        }
+    });
+</script>
+{% endblock %}

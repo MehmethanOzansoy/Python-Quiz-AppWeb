@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}İstatistiklerim - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Sınav İstatistiklerim</h2>
+            </div>
+            <div class="card-body">
+                <h4>Genel İstatistikler</h4>
+                {% if total_attempts > 0 %}
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card bg-dark">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Toplam Sınav</h5>
+                                    <p class="display-4">{{ total_attempts }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-dark">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Ortalama Puan</h5>
+                                    <p class="display-4">{{ average_score|round(1) }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-dark">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Ortalama Başarı</h5>
+                                    <p class="display-4">{{ average_percentage|round }}%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>Derse Göre İstatistikler</h4>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ders</th>
+                                    <th>Katılım</th>
+                                    <th>Ortalama Puan</th>
+                                    <th>Ortalama Başarı</th>
+                                    <th>En İyi Skor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subject, stats in subject_stats.items() %}
+                                <tr>
+                                    <td>{{ subject }}</td>
+                                    <td>{{ stats.attempts }}</td>
+                                    <td>{{ stats.average_score|round(1) }}</td>
+                                    <td>{{ stats.average_percentage|round }}%</td>
+                                    <td>{{ stats.best_score }} ({{ stats.best_percentage|round }}%)</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Sınav Geçmişi</h4>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tarih</th>
+                                    <th>Ders</th>
+                                    <th>Puan</th>
+                                    <th>Başarı</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for attempt in attempts %}
+                                {% set percentage = (attempt.score / attempt.total_questions) * 100 %}
+                                <tr>
+                                    <td>{{ attempt.date.strftime('%d.%m.%Y %H:%M') }}</td>
+                                    <td>{{ attempt.subject.name }}</td>
+                                    <td>{{ attempt.score }} / {{ attempt.total_questions }}</td>
+                                    <td>
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar {% if percentage < 50 %}bg-danger{% elif percentage < 70 %}bg-warning{% else %}bg-success{% endif %}" 
+                                                 role="progressbar" 
+                                                 style="width: {{ percentage }}%;" 
+                                                 aria-valuenow="{{ percentage }}" 
+                                                 aria-valuemin="0" 
+                                                 aria-valuemax="100">
+                                                {{ percentage|round|int }}%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        Henüz hiç sınava girmediniz.
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">Ana Sayfaya Dön</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

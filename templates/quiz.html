@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ subject.name }} Sınavı - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>{{ subject.name }} Sınavı</h2>
+                {% if topic is defined and topic %}
+                <div class="mt-2">
+                    <span class="badge bg-primary fs-5">Konu: {{ topic }}</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p>Bu sınavda {{ questions|length }} soru bulunmaktadır. Her soru eşit puana sahiptir.</p>
+                
+                <form method="post" action="{{ url_for('submit_quiz') }}">
+                    <input type="hidden" name="subject_id" value="{{ subject.id }}">
+                    {% if topic is defined and topic %}
+                    <input type="hidden" name="topic" value="{{ topic }}">
+                    {% endif %}
+                    
+                    {% for question in questions %}
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5>Soru {{ loop.index }}</h5>
+                                {% if question.topic and (topic is not defined or question.topic != topic) %}
+                                <div class="badge bg-info text-dark">Konu: {{ question.topic }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <p>{{ question.text }}</p>
+                                
+                                {% if question.image %}
+                                <div class="mb-3">
+                                    <img src="{{ url_for('serve_image', filename=question.image) }}" alt="Soru görseli" class="img-fluid mb-3" style="max-height: 300px;">
+                                </div>
+                                {% endif %}
+                                
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_a" value="A" required>
+                                        <label class="form-check-label" for="q{{ question.id }}_a">
+                                            A: {{ question.option_a }}
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_b" value="B">
+                                        <label class="form-check-label" for="q{{ question.id }}_b">
+                                            B: {{ question.option_b }}
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_c" value="C">
+                                        <label class="form-check-label" for="q{{ question.id }}_c">
+                                            C: {{ question.option_c }}
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_d" value="D">
+                                        <label class="form-check-label" for="q{{ question.id }}_d">
+                                            D: {{ question.option_d }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Sınavı Tamamla</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

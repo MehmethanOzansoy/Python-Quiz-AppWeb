@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Ana Sayfa - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4 shadow-lg border-0">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-graduation-cap display-1 text-primary mb-3"></i>
+                    <h1 class="display-4 fw-bold text-primary">Quiz Uygulamasına Hoş Geldiniz</h1>
+                    <p class="lead">Bu uygulama ile çeşitli derslerde kendinizi test edebilir ve bilgilerinizi geliştirebilirsiniz.</p>
+                    {% if not session.get('user_id') %}
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i> Giriş Yap
+                            </a>
+                            <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">
+                                <i class="fas fa-user-plus me-2"></i> Üye Ol
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if session.get('user_id') %}
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0"><i class="fas fa-compass me-2"></i> Dersleri Keşfedin</h2>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <p class="lead mb-0">Derslerinizi konulara göre kategorize edilmiş şekilde görüntülemek için keşfet butonuna tıklayın.</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a href="{{ url_for('view_subjects') }}" class="btn btn-primary">
+                                <i class="fas fa-compass me-2"></i> Dersleri ve Konuları Keşfet
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <h2 class="text-white border-bottom border-primary pb-2">
+                <i class="fas fa-book me-2"></i> Mevcut Dersler
+            </h2>
+        </div>
+        
+        {% if subjects %}
+            {% for subject in subjects %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-lg border-0">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-primary rounded-circle p-3 me-3">
+                                    <i class="fas fa-book text-white"></i>
+                                </div>
+                                <h3 class="card-title mb-0">{{ subject.name }}</h3>
+                            </div>
+                            <p class="card-text text-muted">Bu derse ait soruları çözerek bilgilerinizi pekiştirin ve kendinizi test edin.</p>
+                            
+                            <div class="d-flex justify-content-between mt-4">
+                                <span class="badge bg-info text-dark">
+                                    <i class="fas fa-question-circle me-1"></i> {{ subject.questions|length }} Soru
+                                </span>
+                                <span class="badge bg-success">
+                                    {% set topics = subject.questions|map(attribute='topic')|select('defined')|list|unique|list %}
+                                    <i class="fas fa-bookmark me-1"></i> {{ topics|length }} Konu
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-dark d-grid">
+                            <a href="{{ url_for('take_quiz', subject_id=subject.id) }}" class="btn btn-primary">
+                                <i class="fas fa-play-circle me-2"></i> Sınava Başla
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i> Henüz hiç ders eklenmemiş. Lütfen daha sonra tekrar kontrol edin.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}
+{% endblock %} 

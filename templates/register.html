@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Üye Ol - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h3 class="text-center mb-0">Üye Ol</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    <div class="mb-4">
+                        <label for="username" class="form-label">Kullanıcı Adı</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-success"><i class="fas fa-user-plus"></i></span>
+                            <input type="text" class="form-control border-success bg-dark text-white" id="username" name="username" required placeholder="Kullanıcı adı seçin">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label">Şifre</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-success"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control border-success bg-dark text-white" id="password" name="password" required placeholder="Güçlü bir şifre oluşturun">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="user_type" class="form-label">Kullanıcı Tipi</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-success"><i class="fas fa-user-tag"></i></span>
+                            <select class="form-select border-success bg-dark text-white" id="user_type" name="user_type" required>
+                                <option value="student" selected>Öğrenci</option>
+                                <option value="teacher">Öğretmen</option>
+                                <option value="admin">Yönetici</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-user-check me-2"></i> Üye Ol
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-dark p-3">
+                <p class="mb-0">Zaten bir hesabınız var mı? <a href="{{ url_for('login') }}" class="text-success fw-bold">Giriş Yapın</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    .card {
+        border-radius: 10px;
+        border: none;
+        overflow: hidden;
+    }
+    .card-header {
+        border-bottom: none;
+        padding: 1.5rem;
+    }
+    .input-group-text {
+        border-right: none;
+    }
+    .form-control, .form-select {
+        border-left: none;
+    }
+    .form-control:focus, .form-select:focus {
+        box-shadow: none;
+        background-color: #2b3035;
+        color: #f8f9fa;
+    }
+    .btn-success {
+        background-color: #2dce89;
+        border-color: #2dce89;
+        transition: all 0.3s;
+    }
+    .btn-success:hover {
+        background-color: #24a46d;
+        border-color: #24a46d;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    }
+</style>
+{% endblock %} 

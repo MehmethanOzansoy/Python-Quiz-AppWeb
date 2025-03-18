@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Giriş Yap - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="text-center mb-0">Giriş Yap</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    <div class="mb-4">
+                        <label for="username" class="form-label">Kullanıcı Adı</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control border-primary bg-dark text-white" id="username" name="username" required placeholder="Kullanıcı adınızı girin">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label">Şifre</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control border-primary bg-dark text-white" id="password" name="password" required placeholder="Şifrenizi girin">
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i> Giriş Yap
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-dark p-3">
+                <p class="mb-0">Hesabınız yok mu? <a href="{{ url_for('register') }}" class="text-primary fw-bold">Üye Olun</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    .card {
+        border-radius: 10px;
+        border: none;
+        overflow: hidden;
+    }
+    .card-header {
+        border-bottom: none;
+        padding: 1.5rem;
+    }
+    .input-group-text {
+        border-right: none;
+    }
+    .form-control {
+        border-left: none;
+    }
+    .form-control:focus {
+        box-shadow: none;
+        background-color: #2b3035;
+        color: #f8f9fa;
+    }
+    .btn-primary {
+        background-color: #5e72e4;
+        border-color: #5e72e4;
+        transition: all 0.3s;
+    }
+    .btn-primary:hover {
+        background-color: #324cdd;
+        border-color: #324cdd;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    }
+</style>
+{% endblock %} 

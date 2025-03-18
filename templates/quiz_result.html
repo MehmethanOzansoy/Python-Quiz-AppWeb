@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Sınav Sonucu - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="text-center">{{ subject.name }} Sınavı Sonucu</h2>
+                {% if topic is defined and topic %}
+                <p class="text-center mt-2">
+                    <span class="badge bg-primary fs-5">Konu: {{ topic }}</span>
+                </p>
+                {% endif %}
+            </div>
+            <div class="card-body text-center">
+                <div class="display-1 mb-4">{{ score }} / {{ total }}</div>
+                
+                <div class="progress mb-4" style="height: 30px;">
+                    <div class="progress-bar {% if percentage < 50 %}bg-danger{% elif percentage < 70 %}bg-warning{% else %}bg-success{% endif %}" 
+                         role="progressbar" 
+                         style="width: {{ percentage }}%;" 
+                         aria-valuenow="{{ percentage }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                        {{ percentage|round|int }}%
+                    </div>
+                </div>
+                
+                <div class="alert {% if percentage < 50 %}alert-danger{% elif percentage < 70 %}alert-warning{% else %}alert-success{% endif %}" role="alert">
+                    {% if percentage < 50 %}
+                        <h4>Daha fazla çalışmalısın!</h4>
+                        <p>Bu derste daha fazla pratik yapman gerekiyor.</p>
+                    {% elif percentage < 70 %}
+                        <h4>İyi iş!</h4>
+                        <p>Biraz daha çalışırsan başarılı olabilirsin.</p>
+                    {% else %}
+                        <h4>Mükemmel!</h4>
+                        <p>Harika bir performans gösterdin.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">Ana Sayfaya Dön</a>
+                <a href="{{ url_for('take_quiz', subject_id=subject.id) }}" class="btn btn-secondary">Sınavı Tekrar Et</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ subject.name }} Konuları - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2>{{ subject.name }} Dersi Konuları</h2>
+                <a href="{{ url_for('view_subjects') }}" class="btn btn-secondary">Tüm Dersler</a>
+            </div>
+            <div class="card-body">
+                <p>Aşağıdaki konulardan birine tıklayarak ilgili konudaki sınava katılabilirsiniz.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if topics %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for topic in topics %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4 class="card-title">{{ topic }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <h5>{{ topic_data[topic].question_count }}</h5>
+                    <small>Soru</small>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('take_topic_quiz', subject_id=subject.id, topic=topic) }}" class="btn btn-primary w-100">Sınava Katıl</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+    {% if no_topic_count > 0 %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4 class="card-title">Konusuz Sorular</h4>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <h5>{{ no_topic_count }}</h5>
+                    <small>Soru</small>
+                </div>
+                <p class="card-text">Bu sorular herhangi bir konuya atanmamış.</p>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('take_quiz', subject_id=subject.id) }}" class="btn btn-primary w-100">Sınava Katıl</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% else %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h4 class="alert-heading">Henüz Konu Yok</h4>
+                    <p>Bu ders için henüz konu sınıflandırması yapılmamış.</p>
+                </div>
+                
+                {% if no_topic_count > 0 %}
+                <div class="text-center">
+                    <p>Ancak konusuz {{ no_topic_count }} soru mevcut.</p>
+                    <a href="{{ url_for('take_quiz', subject_id=subject.id) }}" class="btn btn-primary">Tüm Sorularla Sınava Katıl</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <a href="{{ url_for('take_quiz', subject_id=subject.id) }}" class="btn btn-success">Tüm Konularla Sınava Katıl</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

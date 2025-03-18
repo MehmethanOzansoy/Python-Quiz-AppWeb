@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Dersler - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Dersler</h2>
+            </div>
+            <div class="card-body">
+                <p>Aşağıdaki derslerden birine tıklayarak konulara göz atabilir veya tümüne katılabilirsiniz.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for subject in subjects %}
+    {% set data = subject_data[subject.id] %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4 class="card-title">{{ subject.name }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-around mb-3">
+                    <div class="text-center">
+                        <h5>{{ data.question_count }}</h5>
+                        <small>Soru</small>
+                    </div>
+                    <div class="text-center">
+                        <h5>{{ data.topic_count }}</h5>
+                        <small>Konu</small>
+                    </div>
+                </div>
+                
+                {% if data.topics %}
+                <p class="card-text">Konular:</p>
+                <ul class="list-group list-group-flush">
+                    {% for topic in data.topics[:3] %}
+                    <li class="list-group-item bg-dark text-white">{{ topic }}</li>
+                    {% endfor %}
+                    {% if data.topics|length > 3 %}
+                    <li class="list-group-item bg-dark text-white">Ve {{ data.topics|length - 3 }} konu daha...</li>
+                    {% endif %}
+                </ul>
+                {% else %}
+                <p class="card-text">Bu derste henüz konu sınıflandırması yapılmamış.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a href="{{ url_for('view_topics', subject_id=subject.id) }}" class="btn btn-primary">Konuları Gör</a>
+                <a href="{{ url_for('take_quiz', subject_id=subject.id) }}" class="btn btn-success">Tümüne Katıl</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 
